@@ -1,9 +1,15 @@
+package frc.robot;
+
 import org.photonvision.*;
 import org.photonvision.targeting.PhotonPipelineResult;
 public class DriverCamera {
     PhotonCamera camera = new PhotonCamera("photonvision");
-    int index = 0;
-    
+    int index = 1;
+    public DriverCamera() {
+        setFPSLimit();
+        toggleDriverMode();
+        setPipelineIndex(index);
+    } 
     // Set pipeline index
     public void setPipelineIndex(int index) {
         camera.setPipelineIndex(index);
