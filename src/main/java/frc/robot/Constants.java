@@ -56,13 +56,32 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 7; // BLD
     public static final int kRearRightTurningCanId = 8; // BLT
     
-    //EXTRAS
+    public static final boolean kGyroReversed = false;
+  }
+
+  public static final class IntakeConstants {
+    public static final double kIntakeSpeed = 0.5;
+    public static final double kReverseIntakeSpeed = -0.5;
+    
+    //CAN IDs
     public static final int kIntake = 9; // INTAKE
-    public static final int kIndexer = 10; // INDEX
+  }
+
+  public static final class ShooterConstants {
+    public static final double kShooterSpeed = 0.5;
+    public static final double kReverseShooterSpeed = -0.5;
+
+    //CAN IDs
     public static final int kShooterLead = 11; // SHOOT 1
     public static final int kShooterFollow = 12; // SHOOT 2
+  }
 
-    public static final boolean kGyroReversed = false;
+  public static final class FeederConstants {
+    public static final double kFeederSpeed = 0.5;
+    public static final double kReverseFeederSpeed = -0.5;
+
+    //CAN IDs
+    public static final int kFeeder = 10; // FEED
   }
 
   public static final class ModuleConstants {
@@ -85,6 +104,8 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
+    public static final double kTriggerButtonThreshold = 0.2;
+
   }
 
   public static final class AutoConstants {

@@ -13,16 +13,23 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ReverseFeeder;
+import frc.robot.commands.ReverseIntake;
+import frc.robot.commands.RunFeeder;
+import frc.robot.commands.RunIntake;
+import frc.robot.commands.RunShooter;
+import frc.robot.commands.StopShooter;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -35,9 +42,12 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Shooter m_shooter = new Shooter();
+  private final Feeder m_feeder = new Feeder();
+  private final Intake m_intake = new Intake();
 
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  //Driver controller
+  private final CommandXboxController controller = new CommandXboxController(OIConstants.kDriverControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -52,9 +62,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(controller.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(controller.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(controller.getRightX(), OIConstants.kDriveDeadband),
                 true),
             m_robotDrive));
   }
@@ -69,15 +79,30 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
 
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
-        .onTrue(new InstantCommand(
-            () -> m_robotDrive.zeroHeading(),
-            m_robotDrive));
+    //X Formation - set wheels in x formation to resist being pushed while left stick is pressed in
+    controller.leftStick().whileTrue(m_robotDrive.setXCommand());
+
+    //Zero Heading - reset the robot's heading to zero when the start button is pressed in
+    controller.start().onTrue(m_robotDrive.zeroHeadingCommand());
+
+    // Shooter - flywhel runs when the Y button is pressed, and stops when pressed again
+    controller.y()
+        .toggleOnTrue(new RunShooter(m_shooter))
+        .toggleOnFalse(new StopShooter(m_shooter));
+
+    //Feeder + Intake - runs when the RB button is held, and stops when released
+    //Running the intake with the feeder will hopefully help prevent jamming
+    controller.rightBumper().whileTrue(new RunFeeder(m_feeder).alongWith(new RunIntake(m_intake)));
+
+    //Reverese Feeder - runs when the LB button is held, and stops when released
+    controller.leftBumper().whileTrue(new ReverseFeeder(m_feeder));
+
+    //Intake - runs when the RT is held, and stops when released
+    controller.rightTrigger(OIConstants.kTriggerButtonThreshold).whileTrue(new RunIntake(m_intake));  
+
+    //Reverse Intake - runs when the LT is held, and stops when released
+    controller.leftTrigger(OIConstants.kTriggerButtonThreshold).whileTrue(new ReverseIntake(m_intake));
   }
 
   /**

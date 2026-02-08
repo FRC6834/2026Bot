@@ -60,4 +60,43 @@ public final class Configs {
                     .positionWrappingInputRange(0, turningFactor);
         }
     }
+
+     public static final class ShooterSubsystem {
+        public static final SparkFlexConfig flywheelConfig = new SparkFlexConfig();
+        public static final SparkFlexConfig flywheelFollowerConfig = new SparkFlexConfig();
+
+        static {
+                // Configure basic setting of the flywheel motors
+                flywheelConfig
+                        .inverted(true)
+                        .idleMode(IdleMode.kCoast);
+
+
+                // Configure the follower flywheel motor to follow the main flywheel motor
+                flywheelFollowerConfig.apply(flywheelConfig)
+                        .follow(Constants.ShooterConstants.kShooterLead, true);
+        }
+  }
+
+  public static final class FeederSubsystem{
+        public static final SparkFlexConfig feederConfig = new SparkFlexConfig();
+
+        static {
+                // Configure basic setting of the feeder motor
+                feederConfig
+                        .inverted(true)
+                        .idleMode(IdleMode.kCoast);
+        }
+  }
+
+  public static final class IntakeSubsystem{
+        public static final SparkFlexConfig intakeConfig = new SparkFlexConfig();
+
+        static {
+                // Configure basic setting of the intake motor
+                intakeConfig
+                        .inverted(true)
+                        .idleMode(IdleMode.kCoast);
+        }
+  }
 }
