@@ -1,7 +1,7 @@
 package frc.robot;
 
 import org.photonvision.*;
-public class DriverCamera {
+public final class DriverCamera {
     PhotonCamera camera = new PhotonCamera("photonvision");
 
     // Driver camera settings
