@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.DriverCamera;
@@ -20,6 +21,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  // Declare Cameras
   private DriverCamera m_driverCamera;
   private LimelightSubsystem m_limelightSubsystem;
 
@@ -34,7 +37,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     m_driverCamera = new DriverCamera();
     m_limelightSubsystem = new LimelightSubsystem();
-    m_limelightSubsystem.DisplayData();
+    
   }
 
   /**
@@ -51,6 +54,11 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // Publish Limelight data to SmartDashboard when robot code is running.
+    m_limelightSubsystem.DisplayData();
+    
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
