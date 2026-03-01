@@ -68,7 +68,7 @@ public final class Configs {
         static {
                 // Configure basic setting of the flywheel motors
                 flywheelConfig
-                        .inverted(true)
+                        .inverted(false)
                         .idleMode(IdleMode.kCoast);
 
 
@@ -84,7 +84,7 @@ public final class Configs {
         static {
                 // Configure basic setting of the feeder motor
                 feederConfig
-                        .inverted(true)
+                        .inverted(false)
                         .idleMode(IdleMode.kCoast);
         }
   }
@@ -95,7 +95,7 @@ public final class Configs {
         static {
                 // Configure basic setting of the intake motor
                 intakeConfig
-                        .inverted(true)
+                        .inverted(false)
                         .idleMode(IdleMode.kCoast);
         }
   }

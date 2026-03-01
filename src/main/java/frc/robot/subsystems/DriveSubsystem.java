@@ -44,7 +44,7 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   //navX (replaces default gyro for better performance and reliability)
-  private final AHRS navx = new AHRS(NavXComType.kMXP_SPI);
+  private final AHRS navx = new AHRS(NavXComType.kUSB1);
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(

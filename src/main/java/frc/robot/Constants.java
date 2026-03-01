@@ -47,14 +47,14 @@ public final class Constants {
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 1; // FLD
-    public static final int kRearLeftDrivingCanId = 2; // FLT
-    public static final int kFrontRightDrivingCanId = 3; // FRD
-    public static final int kRearRightDrivingCanId = 4; // FRT
+    public static final int kRearLeftDrivingCanId = 7; //RLD
+    public static final int kFrontRightDrivingCanId = 3; //FRD
+    public static final int kRearRightDrivingCanId = 5; //RRD
 
-    public static final int kFrontLeftTurningCanId = 5; // BRD
-    public static final int kRearLeftTurningCanId = 6; // BRT
-    public static final int kFrontRightTurningCanId = 7; // BLD
-    public static final int kRearRightTurningCanId = 8; // BLT
+    public static final int kFrontLeftTurningCanId = 2; //FLT
+    public static final int kRearLeftTurningCanId = 8; // RLT
+    public static final int kFrontRightTurningCanId = 4; // FRT
+    public static final int kRearRightTurningCanId = 6; // RRT
     
     public static final boolean kGyroReversed = false;
   }
@@ -68,8 +68,10 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final double kShooterSpeed = 0.5;
-    public static final double kReverseShooterSpeed = -0.5;
+    public static final double kFastShooterSpeed = 0.35
+  ;
+    public static final double kFastReverseShooterSpeed = -0.40;
+    public static final double kSlowShooterSpeed = 0.25;
 
     //CAN IDs
     public static final int kShooterLead = 11; // SHOOT 1

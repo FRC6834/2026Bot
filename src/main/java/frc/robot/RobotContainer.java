@@ -20,7 +20,8 @@ import frc.robot.commands.ReverseFeeder;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.RunFeeder;
 import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunShooter;
+import frc.robot.commands.RunLongShooter;
+import frc.robot.commands.RunShortShooter;
 import frc.robot.commands.StopShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
@@ -88,7 +89,11 @@ public class RobotContainer {
 
     // Shooter - flywhel runs when the Y button is pressed, and stops when pressed again
     controller.y()
-        .toggleOnTrue(new RunShooter(m_shooter))
+        .toggleOnTrue(new RunLongShooter(m_shooter))
+        .toggleOnFalse(new StopShooter(m_shooter));
+
+    controller.a()
+        .toggleOnTrue(new RunShortShooter(m_shooter))
         .toggleOnFalse(new StopShooter(m_shooter));
 
     //Feeder + Intake - runs when the RB button is held, and stops when released

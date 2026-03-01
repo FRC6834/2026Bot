@@ -31,9 +31,13 @@ public class Shooter extends SubsystemBase {
 
     //Shooter Methods
     //Speeds can be adjusted in the Constants class
-    public void runShooter() {
-        shooterLead.set(Constants.ShooterConstants.kShooterSpeed);
+    public void runLongShooter() {
+        shooterLead.set(Constants.ShooterConstants.kFastShooterSpeed);
     }   
+
+    public void runShortShooter(){
+        shooterLead.set(Constants.ShooterConstants.kSlowShooterSpeed);
+    }
          
     public void stopShooter() {
         shooterLead.set(0);
