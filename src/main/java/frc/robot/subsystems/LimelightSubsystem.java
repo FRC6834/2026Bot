@@ -29,7 +29,7 @@ public class LimelightSubsystem extends SubsystemBase {
         double targetOffsetAngle_Vertical = ty.getDouble(0.0);
 
          // how many degrees back is your limelight rotated from perfectly vertical?
-        double limelightMountAngleDegrees = 25.0; 
+        double limelightMountAngleDegrees = 0.0; 
 
         // distance from the center of the Limelight lens to the floor
         double limelightLensHeightInches = 1.347; 
@@ -70,7 +70,7 @@ public class LimelightSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Limelight X", X);
         SmartDashboard.putNumber("Limelight Y", Y);
         SmartDashboard.putNumber("Limelight Area", area);
-        SmartDashboard.putNumber("Limelight Distance", getDistance());
+        SmartDashboard.putNumber("Limelight Distance (IN)", getDistance());
 
         // Display general status values
         SmartDashboard.putNumber("Limelight CPU Temp (C)", cpu_temp_celsius);
