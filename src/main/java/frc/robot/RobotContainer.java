@@ -25,6 +25,7 @@ import frc.robot.commands.RunFeeder;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunLongShooter;
 import frc.robot.commands.RunShortShooter;
+import frc.robot.commands.RunAdjustableShooter;
 import frc.robot.commands.StopShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
@@ -101,12 +102,21 @@ public class RobotContainer {
 
     // Shooter - flywhel runs when the Y button is pressed, and stops when pressed again
     controller.y()
-        .toggleOnTrue(new RunLongShooter(m_shooter))
+        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.50)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
         .toggleOnFalse(new StopShooter(m_shooter));
 
     controller.a()
-        .toggleOnTrue(new RunShortShooter(m_shooter))
+        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.30)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
         .toggleOnFalse(new StopShooter(m_shooter));
+
+    controller.x()
+        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.38)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
+        .toggleOnFalse(new StopShooter(m_shooter));
+
+    controller.b()
+        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.40)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
+        .toggleOnFalse(new StopShooter(m_shooter));
+    
 
     //Feeder + Intake - runs when the RB button is held, and stops when released
     //Running the intake with the feeder will hopefully help prevent jamming

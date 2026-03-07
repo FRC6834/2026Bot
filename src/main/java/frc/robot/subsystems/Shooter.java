@@ -38,6 +38,10 @@ public class Shooter extends SubsystemBase {
     public void runShortShooter(){
         shooterLead.set(Constants.ShooterConstants.kSlowShooterSpeed);
     }
+
+    public void runAdjustableShooter(double speed) {
+        shooterLead.set(speed);
+    }
          
     public void stopShooter() {
         shooterLead.set(0);
