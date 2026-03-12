@@ -22,5 +22,4 @@ public class ClimberUp extends Command {
     public boolean isFinished() {
         return false;
     }
-    
 }

@@ -19,6 +19,6 @@ public class StopShooter extends Command {
 
      // Continues running until interrupted or ended
      public boolean isFinished() {
-         return true;
+         return false;
      }
 }

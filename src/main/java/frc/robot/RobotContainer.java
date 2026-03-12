@@ -24,6 +24,7 @@ import frc.robot.commands.ClimberDown;
 import frc.robot.commands.ReverseFeeder;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.RunFeeder;
+import frc.robot.commands.StopFeeder;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunLongShooter;
 import frc.robot.commands.RunShortShooter;
@@ -40,6 +41,11 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -57,19 +63,27 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Climber m_climber = new Climber();
 
-  
-
-  
-
   //Driver controller
   private final CommandXboxController controller = new CommandXboxController(OIConstants.kDriverControllerPort);
+
+  private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // Register commands by name for Path Planner
+    NamedCommands.registerCommand("RunIntake", new RunIntake(m_intake));
+    NamedCommands.registerCommand("RunFeeder", new RunFeeder(m_feeder));
+    NamedCommands.registerCommand("StopFeeder", new StopFeeder(m_feeder));
+    NamedCommands.registerCommand("RunShooter", new RunAdjustableShooter(m_shooter, 0.50));
+    NamedCommands.registerCommand("StopShooter", new StopShooter(m_shooter));
+    NamedCommands.registerCommand("ClimberUp", new ClimberUp(m_climber));
+    NamedCommands.registerCommand("ClimberDown", new ClimberDown(m_climber));
 
-   
+    //Build Auto Chooser
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   
     // Configure the button bindings
     configureButtonBindings();
@@ -141,43 +155,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    return autoChooser.getSelected();
   }
 }
