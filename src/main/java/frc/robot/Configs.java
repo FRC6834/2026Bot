@@ -99,4 +99,15 @@ public final class Configs {
                         .idleMode(IdleMode.kCoast);
         }
   }
+
+  public static final class ClimberSubsystem{
+        public static final SparkMaxConfig climberConfig = new SparkMaxConfig();
+
+        static {
+                // Configure basic setting of the climber motor
+                climberConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake);
+        }
+}
 }

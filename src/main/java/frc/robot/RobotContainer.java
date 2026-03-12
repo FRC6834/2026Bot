@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ClimberUp;
+import frc.robot.commands.ClimberDown;
 import frc.robot.commands.ReverseFeeder;
 import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.RunFeeder;
@@ -31,6 +33,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -52,6 +55,7 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter();
   private final Feeder m_feeder = new Feeder();
   private final Intake m_intake = new Intake();
+  private final Climber m_climber = new Climber();
 
   
 
@@ -100,22 +104,21 @@ public class RobotContainer {
     //Zero Heading - reset the robot's heading to zero when the start button is pressed in
     controller.start().onTrue(m_robotDrive.zeroHeadingCommand());
 
+    
     // Shooter - flywhel runs when the Y button is pressed, and stops when pressed again
-    controller.y()
+    controller.y() //12 ft shot
         .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.50)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
         .toggleOnFalse(new StopShooter(m_shooter));
 
-    controller.a()
-        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.30)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
-        .toggleOnFalse(new StopShooter(m_shooter));
-
-    controller.x()
+    controller.x() //8 ft shot
         .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.38)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
         .toggleOnFalse(new StopShooter(m_shooter));
 
-    controller.b()
-        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.40)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
-        .toggleOnFalse(new StopShooter(m_shooter));
+    //Climber Up 
+    controller.a().whileTrue(new ClimberUp(m_climber));
+
+    //Climber Down
+    controller.b().whileTrue(new ClimberDown(m_climber));
     
 
     //Feeder + Intake - runs when the RB button is held, and stops when released

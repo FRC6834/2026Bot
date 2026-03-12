@@ -87,6 +87,14 @@ public final class Constants {
     public static final int kFeeder = 10; // FEED
   }
 
+  public static final class ClimberConstants {
+    public static final double kClimberUpSpeed = 0.9;
+    public static final double kClimberDownSpeed = -0.9;
+
+    //CAN IDs
+    public static final int kClimber = 13; // CLIMB
+  }
+
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T,
     // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
