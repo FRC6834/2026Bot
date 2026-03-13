@@ -5,19 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ClimberUp;
 import frc.robot.commands.ClimberDown;
@@ -26,8 +16,6 @@ import frc.robot.commands.ReverseIntake;
 import frc.robot.commands.RunFeeder;
 import frc.robot.commands.StopFeeder;
 import frc.robot.commands.RunIntake;
-import frc.robot.commands.RunLongShooter;
-import frc.robot.commands.RunShortShooter;
 import frc.robot.commands.RunAdjustableShooter;
 import frc.robot.commands.StopShooter;
 import frc.robot.subsystems.DriveSubsystem;
@@ -36,16 +24,12 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -73,13 +57,25 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Register commands by name for Path Planner
-    NamedCommands.registerCommand("RunIntake", new RunIntake(m_intake));
-    NamedCommands.registerCommand("RunFeeder", new RunFeeder(m_feeder));
-    NamedCommands.registerCommand("StopFeeder", new StopFeeder(m_feeder));
-    NamedCommands.registerCommand("RunShooter", new RunAdjustableShooter(m_shooter, 0.50));
-    NamedCommands.registerCommand("StopShooter", new StopShooter(m_shooter));
-    NamedCommands.registerCommand("ClimberUp", new ClimberUp(m_climber));
-    NamedCommands.registerCommand("ClimberDown", new ClimberDown(m_climber));
+    NamedCommands.registerCommand(
+        "StartShooter",
+        new InstantCommand(() -> m_shooter.runAdjustableShooter(0.5), m_shooter)
+    );
+
+    NamedCommands.registerCommand(
+        "StopShooter",
+        new InstantCommand(() -> m_shooter.stopShooter(), m_shooter)
+    );
+
+        NamedCommands.registerCommand(
+        "StartFeeder",
+        new InstantCommand(() -> m_feeder.runFeeder(), m_feeder)
+    );
+
+    NamedCommands.registerCommand(
+        "StopFeeder",
+        new InstantCommand(() -> m_feeder.stopFeeder(), m_feeder)
+    );
 
     //Build Auto Chooser
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -121,12 +117,10 @@ public class RobotContainer {
     
     // Shooter - flywhel runs when the Y button is pressed, and stops when pressed again
     controller.y() //12 ft shot
-        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.50)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
-        .toggleOnFalse(new StopShooter(m_shooter));
+        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.50));
 
     controller.x() //8 ft shot
-        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.38)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
-        .toggleOnFalse(new StopShooter(m_shooter));
+        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.38));
 
     //Climber Up 
     controller.a().whileTrue(new ClimberUp(m_climber));

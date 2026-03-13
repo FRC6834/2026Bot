@@ -15,10 +15,6 @@ public class StopFeeder extends Command {
         feeder.stopFeeder();
     }
 
-    public void end(boolean interrupted) {
-        feeder.stopFeeder();
-    }
-
     public boolean isFinished() {
         return false;
     }

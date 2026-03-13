@@ -15,9 +15,14 @@ public class RunAdjustableShooter extends Command {
      }
 
      // What should happen when the command begins?
-     public void initialize() {
+     public void execute() {
         shooter.runAdjustableShooter(speed);
      }
+
+       // What should happen when the command ends?
+      public void end(boolean interrupted) {
+        shooter.stopShooter();
+    }
 
      // Continues running until interrupted or ended
      public boolean isFinished() {
