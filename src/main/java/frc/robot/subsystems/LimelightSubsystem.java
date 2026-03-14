@@ -47,30 +47,38 @@ public class LimelightSubsystem extends SubsystemBase {
         return distanceFromApriltag;
     }
 
-    // All this method does is get the values from the limelight and publish them to the SmartDashboard.
-    // Its called in Robot.java in the robotPeriodic() method to publish the values on the SmartDashboard and later be placed on elastic.
-    public static void DisplayData() {
-        // Get the apriltag-specific values from limelight
-        double X = LimelightHelpers.getTX("limelight");
-        double Y = LimelightHelpers.getTY("limelight");
-        boolean TV = LimelightHelpers.getTV("limelight");
-        double area = LimelightHelpers.getTA("limelight");
-
-        // Get the array of values for stats from the limelight via networktables 
-         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-        double[] llstats = table.getEntry("hw").getDoubleArray(new double[6]);
+    public static double getRotation() {
+        double cameraLensHorizontalOffset = LimelightHelpers.getTX("limelight") / getDistance();
+        double realHorizontalOffset = Math.atan(cameraLensHorizontalOffset / getDistance());
+        double rotationError = Math.atan(realHorizontalOffset / getDistance());
+        return rotationError;
+        }
     
-        // initialize variables for each number in the array 
-        double cpu_temp_celsius = llstats[0];
-        double cpu_usage = llstats[1];
-        double ram_usage = llstats[2];
-        double fps = llstats[3];
-
-        // Display the values on the SmartDashboard
-        SmartDashboard.putNumber("Limelight X", X);
-        SmartDashboard.putNumber("Limelight Y", Y);
-        SmartDashboard.putNumber("Limelight Area", area);
-        SmartDashboard.putNumber("Limelight Distance (IN)", getDistance());
+        // All this method does is get the values from the limelight and publish them to the SmartDashboard.
+        // Its called in Robot.java in the robotPeriodic() method to publish the values on the SmartDashboard and later be placed on elastic.
+        public static void DisplayData() {
+            // Get the apriltag-specific values from limelight
+            double X = LimelightHelpers.getTX("limelight");
+            double Y = LimelightHelpers.getTY("limelight");
+            boolean TV = LimelightHelpers.getTV("limelight");
+            double area = LimelightHelpers.getTA("limelight");
+    
+            // Get the array of values for stats from the limelight via networktables 
+             NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+            double[] llstats = table.getEntry("hw").getDoubleArray(new double[6]);
+        
+            // initialize variables for each number in the array 
+            double cpu_temp_celsius = llstats[0];
+            double cpu_usage = llstats[1];
+            double ram_usage = llstats[2];
+            double fps = llstats[3];
+    
+            // Display the values on the SmartDashboard
+            SmartDashboard.putNumber("Limelight X", X);
+            SmartDashboard.putNumber("Limelight Y", Y);
+            SmartDashboard.putNumber("Limelight Area", area);
+            SmartDashboard.putNumber("Limelight Distance (IN)", getDistance());
+            SmartDashboard.putNumber("Limelight Rotation (RAD)", getRotation());
 
         // Display general status values
         SmartDashboard.putNumber("Limelight CPU Temp (C)", cpu_temp_celsius);
