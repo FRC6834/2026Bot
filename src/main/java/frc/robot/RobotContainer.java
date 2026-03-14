@@ -18,6 +18,7 @@ import frc.robot.commands.StopFeeder;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunAdjustableShooter;
 import frc.robot.commands.StopShooter;
+import frc.robot.commands.AlignToHub;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
@@ -141,6 +142,9 @@ public class RobotContainer {
 
     //Reverse Intake - runs when the LT is held, and stops when released
     controller.leftTrigger(OIConstants.kTriggerButtonThreshold).whileTrue(new ReverseIntake(m_intake));
+
+    // Align to hub - press right-stick button to run alignment (rotation-only)
+    controller.rightStick().onTrue(new AlignToHub(m_robotDrive));
   }
 
   /**
