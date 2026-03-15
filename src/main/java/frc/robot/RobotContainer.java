@@ -144,7 +144,7 @@ public class RobotContainer {
     controller.leftTrigger(OIConstants.kTriggerButtonThreshold).whileTrue(new ReverseIntake(m_intake));
 
     // Align to hub - press right-stick button to run alignment (rotation-only)
-    controller.rightStick().onTrue(new AlignToHub(m_robotDrive));
+    controller.rightStick().whileTrue(new AlignToHub(m_robotDrive));
   }
 
   /**
