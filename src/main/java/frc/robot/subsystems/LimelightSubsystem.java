@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
@@ -13,7 +17,25 @@ public class LimelightSubsystem extends SubsystemBase {
     
     public LimelightSubsystem() {
     }
-
+    // This method sets the priority of apriltag sensing for the Limelight based on the alliance color. This method is needed since the apriltags change on the opposite side of the field, so we want it to be dynamic.
+    public static void HubPriority() {
+        Optional<Alliance> team = DriverStation.getAlliance();
+        int selectedApriltag = 0;
+        if (team.isPresent()) {
+            if (team.get() == Alliance.Red) {
+                selectedApriltag = 10;
+                LimelightHelpers.setPriorityTagID("limelight", selectedApriltag);
+            } else if (team.get() == Alliance.Blue) {
+                selectedApriltag = 26;
+                LimelightHelpers.setPriorityTagID("limelight", selectedApriltag);
+            }
+            SmartDashboard.putString("Limelight Apriltag Prioritizor", "Team " + team.get() + " detected! The limelight will prioritize apriltag #" + selectedApriltag);
+        } else {
+            // Handle the case where the alliance information is not available
+            SmartDashboard.putString("Limelight Apriltag Prioritizor", "No team found! The limelight won't know which apriltag to prioritize.");
+        }
+        
+    }
     // This method calculates the distance from the robot to the AprilTag using a tangent equation - From Limelight Documentation https://docs.limelightvision.io/docs/docs-limelight/apis/limelight-lib#8-getting-detailed-results-from-networktables-rawtargets
      public static double getDistance() {
         // Set pipeline index for limelight
@@ -79,6 +101,7 @@ public class LimelightSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Limelight Area", area);
             SmartDashboard.putNumber("Limelight Distance (IN)", getDistance());
             SmartDashboard.putNumber("Limelight Rotation (RAD)", getRotation());
+        
 
         // Display general status values
         SmartDashboard.putNumber("Limelight CPU Temp (C)", cpu_temp_celsius);

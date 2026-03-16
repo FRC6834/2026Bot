@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.WebServer;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,6 +39,9 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     m_driverCamera = new DriverCamera();
     m_limelightSubsystem = new LimelightSubsystem();
+
+    // Elastic dashboard webserver initialization; allows us to pull the layout
+    WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
     
   }
 
@@ -57,6 +62,7 @@ public class Robot extends TimedRobot {
 
     // Publish Limelight data to SmartDashboard when robot code is running.
     m_limelightSubsystem.DisplayData();
+    m_limelightSubsystem.HubPriority();
     
     
   }
