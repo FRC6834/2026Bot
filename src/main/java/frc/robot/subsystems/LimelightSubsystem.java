@@ -14,10 +14,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 
 public class LimelightSubsystem extends SubsystemBase {
-    
-    public LimelightSubsystem() {
-    }
     // This method sets the priority of apriltag sensing for the Limelight based on the alliance color. This method is needed since the apriltags change on the opposite side of the field, so we want it to be dynamic.
+    // Called in robotPeriodic() in Robot.java to keep the alliance and priority updated at all times.
     public static void HubPriority() {
         Optional<Alliance> team = DriverStation.getAlliance();
         int selectedApriltag = 0;
@@ -37,7 +35,7 @@ public class LimelightSubsystem extends SubsystemBase {
         
     }
     // This method calculates the distance from the robot to the AprilTag using a tangent equation - From Limelight Documentation https://docs.limelightvision.io/docs/docs-limelight/apis/limelight-lib#8-getting-detailed-results-from-networktables-rawtargets
-     public static double getDistance() {
+    public static double getDistance() {
         // Set pipeline index for limelight
         LimelightHelpers.setPipelineIndex("limelight", 1);
 
@@ -68,7 +66,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
         return distanceFromApriltag;
     }
-
+    // This method calculates the rotation in radians needed to center the limelight to the X of the apriltag.
     public static double getRotation() {
         double cameraLensHorizontalOffset = LimelightHelpers.getTX("limelight") / getDistance();
         double realHorizontalOffset = Math.atan(cameraLensHorizontalOffset / getDistance());
@@ -78,29 +76,30 @@ public class LimelightSubsystem extends SubsystemBase {
     
         // All this method does is get the values from the limelight and publish them to the SmartDashboard.
         // Its called in Robot.java in the robotPeriodic() method to publish the values on the SmartDashboard and later be placed on elastic.
-        public static void DisplayData() {
-            // Get the apriltag-specific values from limelight
-            double X = LimelightHelpers.getTX("limelight");
-            double Y = LimelightHelpers.getTY("limelight");
-            boolean TV = LimelightHelpers.getTV("limelight");
-            double area = LimelightHelpers.getTA("limelight");
+    public static void DisplayData() {
+        // Get the apriltag-specific values from limelight
+        double X = LimelightHelpers.getTX("limelight");
+        double Y = LimelightHelpers.getTY("limelight");
+        boolean TV = LimelightHelpers.getTV("limelight");
+        double area = LimelightHelpers.getTA("limelight");
     
-            // Get the array of values for stats from the limelight via networktables 
-             NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-            double[] llstats = table.getEntry("hw").getDoubleArray(new double[6]);
+        // Get the array of values for stats from the limelight via networktables 
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+        double[] llstats = table.getEntry("hw").getDoubleArray(new double[6]);
         
-            // initialize variables for each number in the array 
-            double cpu_temp_celsius = llstats[0];
-            double cpu_usage = llstats[1];
-            double ram_usage = llstats[2];
-            double fps = llstats[3];
+        // initialize variables for each number in the array 
+        double cpu_temp_celsius = llstats[0];
+        double cpu_usage = llstats[1];
+        double ram_usage = llstats[2];
+        double fps = llstats[3];
     
-            // Display the values on the SmartDashboard
-            SmartDashboard.putNumber("Limelight X", X);
-            SmartDashboard.putNumber("Limelight Y", Y);
-            SmartDashboard.putNumber("Limelight Area", area);
-            SmartDashboard.putNumber("Limelight Distance (IN)", getDistance());
-            SmartDashboard.putNumber("Limelight Rotation (RAD)", getRotation());
+        // Display the values on the SmartDashboard
+        SmartDashboard.putNumber("Limelight X", X);
+        SmartDashboard.putNumber("Limelight Y", Y);
+        SmartDashboard.putNumber("Limelight Area", area);
+        SmartDashboard.putNumber("Limelight Distance (IN)", getDistance());
+        SmartDashboard.putNumber("Limelight Rotation (RAD)", getRotation());
+        SmartDashboard.putBoolean("Apriltag Detected?", TV);
         
 
         // Display general status values
