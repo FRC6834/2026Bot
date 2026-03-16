@@ -27,8 +27,17 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+
+
 
 public class DriveSubsystem extends SubsystemBase {
+
+  private final Field2d field = new Field2d();
+  
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -66,6 +75,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
 public DriveSubsystem() {
+
+    SmartDashboard.putData("Field", field);
+
     HAL.report(tResourceType.kResourceType_RobotDrive,
                tInstances.kRobotDriveSwerve_MaxSwerve);
 
@@ -230,5 +242,29 @@ public DriveSubsystem() {
         states, DriveConstants.kMaxSpeedMetersPerSecond);
     setModuleStates(states);
   }
+
+  @Override
+public void periodic() {
+
+    Pose2d pose = getPose();
+
+    SmartDashboard.putNumber("Robot X", pose.getX());
+    SmartDashboard.putNumber("Robot Y", pose.getY());
+    SmartDashboard.putNumber("Robot Heading", pose.getRotation().getDegrees());
+
+    field.setRobotPose(pose);
+
+    // Module angles
+    SmartDashboard.putNumber("FL Angle", m_frontLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("FR Angle", m_frontRight.getState().angle.getDegrees());
+    SmartDashboard.putNumber("BL Angle", m_rearLeft.getState().angle.getDegrees());
+    SmartDashboard.putNumber("BR Angle", m_rearRight.getState().angle.getDegrees());
+
+    // Module speeds
+    SmartDashboard.putNumber("FL Speed", m_frontLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("FR Speed", m_frontRight.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("BL Speed", m_rearLeft.getState().speedMetersPerSecond);
+    SmartDashboard.putNumber("BR Speed", m_rearRight.getState().speedMetersPerSecond);
+}
 
 }
