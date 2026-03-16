@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
 
     // Publish Limelight data to SmartDashboard when robot code is running.
     m_limelightSubsystem.DisplayData();
+    m_limelightSubsystem.HubPriority();
     
     
   }
