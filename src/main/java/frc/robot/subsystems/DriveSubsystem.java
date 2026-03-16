@@ -92,7 +92,7 @@ public DriveSubsystem() {
         this::getPose,
         this::resetOdometry,
         this::getRobotRelativeSpeeds,
-        (speeds, feedforwards) -> driveRobotRelative(speeds),
+        (speeds, feedforwards) -> driveRobotRelative(speeds, feedforwards),
         new PPHolonomicDriveController(
             new PIDConstants(5.0, 0.0, 0.0),
             new PIDConstants(5.0, 0.0, 0.0)
@@ -236,12 +236,29 @@ public DriveSubsystem() {
       m_rearRight.getState());
   }
 
+  //Added 3/14 EG - new method to drive robot relative with feedforwards from PathPlanner
+   public void driveRobotRelative(ChassisSpeeds speeds, com.pathplanner.lib.util.DriveFeedforwards feedforwards) {
+    var states = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.kMaxSpeedMetersPerSecond);
+    
+    // Convert PathPlanner forces (Newtons) to Volts.
+    // Increase this if the robot overshoots; decrease if it stops too early.
+    double ffMultiplier = 0.12; 
+
+    // Use [index] to access the array and .in(Units.Volts) or .magnitude() for the value
+    // PathPlanner Force objects can be converted directly to the value:
+    m_frontLeft.setDesiredState(states[0], feedforwards.robotRelativeForcesX()[0].magnitude() * ffMultiplier);
+    m_frontRight.setDesiredState(states[1], feedforwards.robotRelativeForcesX()[1].magnitude() * ffMultiplier);
+    m_rearLeft.setDesiredState(states[2], feedforwards.robotRelativeForcesX()[2].magnitude() * ffMultiplier);
+    m_rearRight.setDesiredState(states[3], feedforwards.robotRelativeForcesX()[3].magnitude() * ffMultiplier);
+  }
+  /*
   public void driveRobotRelative(ChassisSpeeds speeds) {
     var states = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         states, DriveConstants.kMaxSpeedMetersPerSecond);
     setModuleStates(states);
-  }
+  }*/
 
   @Override
 public void periodic() {

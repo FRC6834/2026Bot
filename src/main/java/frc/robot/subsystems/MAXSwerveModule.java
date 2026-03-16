@@ -11,12 +11,16 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
+
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
 
 import frc.robot.Configs;
 
@@ -92,7 +96,9 @@ public class MAXSwerveModule {
    *
    * @param desiredState Desired state with speed and angle.
    */
-  public void setDesiredState(SwerveModuleState desiredState) {
+
+   //Updated 3/14 EG - not sure if this will work
+  public void setDesiredState(SwerveModuleState desiredState, double feedforwardVoltage) { //added feedforwardVoltage parameter
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
@@ -101,14 +107,26 @@ public class MAXSwerveModule {
     // Optimize the reference state to avoid spinning further than 90 degrees.
     correctedDesiredState.optimize(new Rotation2d(m_turningEncoder.getPosition()));
 
-    //correctedDesiredState.speedMetersPerSecond *= correctedDesiredState.angle.minus(getState().angle).getCos();
+  //Commented out old line below and added this - EG 3/14
+  m_drivingClosedLoopController.setSetpoint(
+      correctedDesiredState.speedMetersPerSecond, 
+      ControlType.kVelocity, 
+      ClosedLoopSlot.kSlot0, // This is the object the error is asking for
+      feedforwardVoltage, 
+      SparkClosedLoopController.ArbFFUnits.kVoltage
+  );
 
 
     // Command driving and turning SPARKS towards their respective setpoints.
-    m_drivingClosedLoopController.setSetpoint(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
+    //m_drivingClosedLoopController.setSetpoint(correctedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
     m_turningClosedLoopController.setSetpoint(correctedDesiredState.angle.getRadians(), ControlType.kPosition);
 
     m_desiredState = desiredState;
+  }
+
+    // Add this so Teleop (joysticks) still works - EG 3/14
+  public void setDesiredState(SwerveModuleState desiredState) {
+      setDesiredState(desiredState, 0.0);
   }
 
   /** Zeroes all the SwerveModule encoders. */

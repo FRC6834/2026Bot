@@ -30,9 +30,9 @@ public final class Configs {
             drivingConfig.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                     // These are example gains you may need to them for your own robot!
-                    .pid(0.3, 0, 0)
+                    .pid(1, 0, 0.05)
                     .outputRange(-1, 1)
-                    .feedForward.kV(0);
+                    .feedForward.kV(drivingVelocityFeedForward*0.7);
                 //.feedForward.kV()
             turningConfig
                     .idleMode(IdleMode.kBrake)
