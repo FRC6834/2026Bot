@@ -45,10 +45,4 @@ public final class DriverCamera {
         camera1.setDriverMode(toggleDriverMode);
         camera2.setDriverMode(toggleDriverMode);
     }
-
-   
-    
-
-    
-    
 }

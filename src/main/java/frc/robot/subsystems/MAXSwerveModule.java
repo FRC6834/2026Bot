@@ -99,6 +99,13 @@ public class MAXSwerveModule {
 
    //Updated 3/14 EG - not sure if this will work
   public void setDesiredState(SwerveModuleState desiredState, double feedforwardVoltage) { //added feedforwardVoltage parameter
+    
+    // Prevent jitter when robot is nearly stopped
+  if (Math.abs(desiredState.speedMetersPerSecond) < 0.001) {
+      m_drivingClosedLoopController.setSetpoint(0, ControlType.kVelocity);
+      return;
+  }
+    
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
