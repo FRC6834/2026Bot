@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -35,6 +36,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 
 public class DriveSubsystem extends SubsystemBase {
+
+  private final SlewRateLimiter xLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter yLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
 
   private final Field2d field = new Field2d();
   
@@ -141,6 +146,17 @@ public DriveSubsystem() {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    
+    // Prevent small joystick inputs from causing the robot to move
+    xSpeed = Math.abs(xSpeed) < 0.05 ? 0 : xSpeed;
+    ySpeed = Math.abs(ySpeed) < 0.05 ? 0 : ySpeed;
+    rot = Math.abs(rot) < 0.05 ? 0 : rot;
+
+    // Apply slew rate limiting to the inputs (this is not necessary, but helps prevent the robot from accelerating too quickly)
+    xSpeed = xLimiter.calculate(xSpeed);
+    ySpeed = yLimiter.calculate(ySpeed);
+    rot = rotLimiter.calculate(rot);
+
     // Convert the commanded speeds into the correct units for the drivetrain
     double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;

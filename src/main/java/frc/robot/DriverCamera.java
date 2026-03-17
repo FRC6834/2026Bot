@@ -19,8 +19,6 @@ public final class DriverCamera {
     //Toggle driver mode on/off.
     boolean toggleDriverMode = true;
 
-
-
     
     public DriverCamera() {
         setFPSLimit(FPS);
@@ -48,10 +46,4 @@ public final class DriverCamera {
         camera1.setDriverMode(toggleDriverMode);
         camera2.setDriverMode(toggleDriverMode);
     }
-
-   
-    
-
-    
-    
 }
