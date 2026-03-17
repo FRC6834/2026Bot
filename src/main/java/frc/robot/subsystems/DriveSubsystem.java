@@ -70,7 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      navx.getRotation2d(),
+      navx.getRotation2d().times(-1),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -126,7 +126,7 @@ public DriveSubsystem() {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        navx.getRotation2d(),
+        navx.getRotation2d().times(-1),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -165,7 +165,7 @@ public DriveSubsystem() {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                navx.getRotation2d())
+                navx.getRotation2d().times(-1))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -280,7 +280,7 @@ public DriveSubsystem() {
 public void periodic() {
 
    m_odometry.update(
-    navx.getRotation2d(),
+    navx.getRotation2d().times(-1),
     new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
         m_frontRight.getPosition(),

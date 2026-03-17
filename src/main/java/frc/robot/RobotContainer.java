@@ -153,4 +153,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
+
+  public DriveSubsystem getDriveSubsystem() {
+    return m_robotDrive;
+  }
 }

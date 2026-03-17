@@ -80,6 +80,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    m_robotContainer.getDriveSubsystem().zeroHeading(); // Zero the gyro at the start of autonomous to ensure accurate heading information
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -96,7 +98,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    m_driveSubsystem.zeroHeading(); // Zero the gyro at the start of autonomous to ensure accurate heading information
   }
 
   @Override
