@@ -58,7 +58,7 @@ public class RobotContainer {
     // Register commands by name for Path Planner
     NamedCommands.registerCommand(
         "StartShooter",
-        new InstantCommand(() -> m_shooter.runAdjustableShooter(0.5), m_shooter)
+        new InstantCommand(() -> m_shooter.runAdjustableShooter(0.38), m_shooter)
     );
 
     NamedCommands.registerCommand(
@@ -114,7 +114,7 @@ public class RobotContainer {
     controller.start().onTrue(m_robotDrive.zeroHeadingCommand());
 
     
-    // Shooter - flywhel runs when the Y button is pressed, and stops when pressed again
+    // Shooter - flywheel runs when the Y button is pressed, and stops when pressed again
     controller.y() //12 ft shot
         .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.50));
 
