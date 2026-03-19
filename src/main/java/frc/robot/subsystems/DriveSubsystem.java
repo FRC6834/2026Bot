@@ -256,6 +256,7 @@ public DriveSubsystem() {
    public void driveRobotRelative(ChassisSpeeds speeds, com.pathplanner.lib.util.DriveFeedforwards feedforwards) {
     var states = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, DriveConstants.kMaxSpeedMetersPerSecond);
+    System.out.print("Test");
     
     // Convert PathPlanner forces (Newtons) to Volts.
     // Increase this if the robot overshoots; decrease if it stops too early.
