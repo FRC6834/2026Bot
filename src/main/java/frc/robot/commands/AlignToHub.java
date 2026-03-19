@@ -17,11 +17,11 @@ public class AlignToHub extends Command {
  
 
   // Proportional gain 
-  private static final double kP = 1.5;
+  private static final double kP = 1.9;
   // Stop when within ~1 degree
   private static final double kToleranceRad = Math.toRadians(1.0);
   // Limit the commanded rotation fraction to avoid spinning too fast 
-  private static final double kMaxRotFraction = 0.6;
+  private static final double kMaxRotFraction = 0.10;
 
   private boolean m_atTarget = false;
 
