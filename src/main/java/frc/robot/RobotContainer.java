@@ -107,12 +107,10 @@ public class RobotContainer {
     
     // Shooter - flywhel runs when the Y button is pressed, and stops when pressed again
     controller.y() //12 ft shot
-        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.50)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
-        .toggleOnFalse(new StopShooter(m_shooter));
+        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.50));
 
     controller.x() //8 ft shot
-        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.38)) //Example of how to use the adjustable shooter command, this will run the shooter at half speed
-        .toggleOnFalse(new StopShooter(m_shooter));
+        .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.38));
 
     //Climber Up 
     controller.a().whileTrue(new ClimberUp(m_climber));
