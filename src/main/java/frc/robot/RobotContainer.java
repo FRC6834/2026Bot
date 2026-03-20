@@ -62,6 +62,11 @@ public class RobotContainer {
     );
 
     NamedCommands.registerCommand(
+      "StartShooterShort",
+      new InstantCommand(() -> m_shooter.runAdjustableShooter(0.32), m_shooter)
+    );
+
+    NamedCommands.registerCommand(
         "StopShooter",
         new InstantCommand(() -> m_shooter.stopShooter(), m_shooter)
     );
