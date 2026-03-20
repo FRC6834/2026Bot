@@ -39,7 +39,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_driverCamera = new DriverCamera();
     m_limelightSubsystem = new LimelightSubsystem();
 
     // Elastic dashboard webserver initialization; allows us to pull the layout
@@ -65,6 +64,7 @@ public class Robot extends TimedRobot {
     // Publish Limelight data to SmartDashboard when robot code is running.
     m_limelightSubsystem.DisplayData();
     m_limelightSubsystem.HubPriority();
+    
     
     
   }
@@ -106,6 +106,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    m_driverCamera = new DriverCamera();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

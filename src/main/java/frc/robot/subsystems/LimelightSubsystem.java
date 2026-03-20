@@ -73,6 +73,8 @@ public class LimelightSubsystem extends SubsystemBase {
         double rotationError = Math.atan(realHorizontalOffset / getDistance());
         return rotationError;
         }
+   
+
     
         // All this method does is get the values from the limelight and publish them to the SmartDashboard.
         // Its called in Robot.java in the robotPeriodic() method to publish the values on the SmartDashboard and later be placed on elastic.

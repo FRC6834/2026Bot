@@ -122,10 +122,10 @@ public class RobotContainer {
         .toggleOnTrue(new RunAdjustableShooter(m_shooter, 0.38));
 
     //Climber Up 
-    controller.a().whileTrue(new ClimberUp(m_climber));
+    //controller.a().whileTrue(new ClimberUp(m_climber));
 
     //Climber Down
-    controller.b().whileTrue(new ClimberDown(m_climber));
+    //controller.b().whileTrue(new ClimberDown(m_climber));
     
 
     //Feeder + Intake - runs when the RB button is held, and stops when released
@@ -142,7 +142,7 @@ public class RobotContainer {
     controller.leftTrigger(OIConstants.kTriggerButtonThreshold).whileTrue(new ReverseIntake(m_intake));
 
     // Align to hub - press right-stick button to run alignment (rotation-only)
-    controller.rightStick().whileTrue(new AlignToHub(m_robotDrive));
+    controller.a().whileTrue(new AlignToHub(m_robotDrive));
   }
 
   /**
