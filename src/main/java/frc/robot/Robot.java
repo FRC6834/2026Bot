@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.DriverCamera;
-import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
@@ -26,9 +25,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private DriveSubsystem m_driveSubsystem;
 
-  // Declare Cameras
-  private DriverCamera m_driverCamera;
-  private LimelightSubsystem m_limelightSubsystem;
+ 
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -39,8 +36,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_limelightSubsystem = new LimelightSubsystem();
-
     // Elastic dashboard webserver initialization; allows us to pull the layout
     WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
     
@@ -62,8 +57,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     // Publish Limelight data to SmartDashboard when robot code is running.
-    m_limelightSubsystem.DisplayData();
-    m_limelightSubsystem.HubPriority();
+   
     
     
     
@@ -106,7 +100,6 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    m_driverCamera = new DriverCamera();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
