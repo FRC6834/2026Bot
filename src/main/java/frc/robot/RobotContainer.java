@@ -20,6 +20,7 @@ import frc.robot.commands.AlignToHub;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,6 +46,7 @@ public class RobotContainer {
   private final Feeder m_feeder = new Feeder();
   private final Intake m_intake = new Intake();
   private final Climber m_climber = new Climber();
+  private final LimelightSubsystem m_LimelightSubsystem = new LimelightSubsystem(); 
 
   //Driver controller
   private final CommandXboxController controller = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -71,7 +73,7 @@ public class RobotContainer {
         new InstantCommand(() -> m_shooter.stopShooter(), m_shooter)
     );
 
-        NamedCommands.registerCommand(
+    NamedCommands.registerCommand(
         "StartFeeder",
         new InstantCommand(() -> m_feeder.runFeeder(), m_feeder)
     );
@@ -80,7 +82,7 @@ public class RobotContainer {
         "StopFeeder",
         new InstantCommand(() -> m_feeder.stopFeeder(), m_feeder)
     );
-
+    
     //Build Auto Chooser
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -112,6 +114,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    // Align to hub - press right-stick button to run alignment (rotation-only)
+    controller.a().whileTrue(new AlignToHub(m_robotDrive));
+    
     //X Formation - set wheels in x formation to resist being pushed while left stick is pressed in
     controller.leftStick().whileTrue(m_robotDrive.setXCommand());
 
@@ -146,8 +151,7 @@ public class RobotContainer {
     //Reverse Intake - runs when the LT is held, and stops when released
     controller.leftTrigger(OIConstants.kTriggerButtonThreshold).whileTrue(new ReverseIntake(m_intake));
 
-    // Align to hub - press right-stick button to run alignment (rotation-only)
-    controller.a().whileTrue(new AlignToHub(m_robotDrive));
+    
   }
 
   /**
