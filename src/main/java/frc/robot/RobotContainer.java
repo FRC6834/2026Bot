@@ -20,6 +20,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ClimberUp;
+import frc.robot.commands.AlignToHub;
 import frc.robot.commands.ClimberDown;
 import frc.robot.commands.ReverseFeeder;
 import frc.robot.commands.ReverseIntake;
@@ -100,6 +101,9 @@ public class RobotContainer {
 
     //X Formation - set wheels in x formation to resist being pushed while left stick is pressed in
     controller.leftStick().whileTrue(m_robotDrive.setXCommand());
+
+    // Align to hub - press right-stick button to run alignment (rotation-only)
+    controller.a().whileTrue(new AlignToHub(m_robotDrive));
 
     //Zero Heading - reset the robot's heading to zero when the start button is pressed in
     controller.start().onTrue(m_robotDrive.zeroHeadingCommand());
