@@ -4,8 +4,8 @@ import org.photonvision.*;
 
 // This class contains the configuration settings for the driver camera (PhotonVision), they are set through networktables.
 public final class DriverCamera {
-    PhotonCamera camera1 = new PhotonCamera("OV9281");
-    PhotonCamera camera2 = new PhotonCamera("OV9281 (1)");
+    PhotonCamera camera1 = new PhotonCamera("camera1");
+    PhotonCamera camera2 = new PhotonCamera("camera2");
 
     // Driver camera settings
 
